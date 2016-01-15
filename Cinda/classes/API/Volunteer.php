@@ -101,6 +101,8 @@ class Volunteer{
 				if( $user_id = self::volunteer_exists( $_POST['email'] ) ){
 					$res = $wpdb->get_results( 'SELECT token FROM '.  CINDA_TABLE_TOKENS_NAME .' WHERE id_volunteer = '.$user_id, 'ARRAY_A' );
 					
+					$avatar = (new self($user_id))->avatar;
+					
 					// If only exists one result
 					if( 1 == count($res) ){
 						$token = $res[0]['token'];
@@ -129,6 +131,8 @@ class Volunteer{
 						
 						$user_id = $volunter->id;
 						
+						$avatar = $volunter->avatar;
+						
 						// insert new token
 						$wpdb->insert(CINDA_TABLE_TOKENS_NAME, array( 
 							'id_volunteer' => $user_id,
@@ -142,7 +146,7 @@ class Volunteer{
 				}
 				
 				// Show response
-				die( json_encode( array($user_id, $token ) ) ); 
+				die( json_encode( array($user_id, $token, $avatar ) ) ); 
 				
 			// Email not send
 			}else{
